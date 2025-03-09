@@ -123,12 +123,11 @@ export const refershAccessToken = asyncHandler(async(req,res)=>{
 
 export const logOut = asyncHandler(async(req,res,next)=>
 {
-    const userId = req.user?._id;
-    const user = await User.findByIdAndUpdate(userId,{$unset:"refreshToken"},{new:true});
-    console.log(userId);
+    console.log('**************')
+    const user = await User.findByIdAndUpdate(req.user?._id,{$unset:{refreshToken : 1}},{new:true});
     console.log(user);
-    clearCookie(accessToken);
-    clearCookie(refreshToken);
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return res.status(200).json(new ApiResponse(200,user,'LoggedOut Successfully'));
 })
 

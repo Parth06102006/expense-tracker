@@ -4,7 +4,7 @@ import {ApiError} from '../utilitis/ApiError.js'
 import jwt from 'jsonwebtoken'
 
 export const authVerify = asyncHandler(async(req,res,next)=>{
-    const accessToken = req.body.accessToken || req.cookie.accessToken || req.headers('Authorization').replace('Bearer ','');
+    const accessToken = req.body.accessToken || req.cookies.accessToken || req.headers('Authorization').replace('Bearer ','');
     if(!accessToken)
     {
         return ApiError(400,'There is no access Token');

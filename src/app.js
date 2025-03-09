@@ -28,10 +28,11 @@ app.use(urlencoded({extended:false}))
 
 import healthCheckRoute from './routes/healthcheck.route.js'
 import userRoute from './routes/user.route.js'
+import expenseRoute from './routes/expense.router.js'
 import { errorHandler } from './middlewares/error.middleware.js';
 app.use('/api/v1/',healthCheckRoute);
 app.use('/api/v2/',userRoute);
-
+app.use('/api/v3',expenseRoute);
 
 app.use(errorHandler);
 export default app;
