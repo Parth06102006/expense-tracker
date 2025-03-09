@@ -26,7 +26,7 @@ const userScehma = new Schema
         refreshToken:{
             type:String,
         }
-    }
+    },{timestamps:true}
 )
 
 userScehma.methods.isPasswordCorrect = async function(password) {

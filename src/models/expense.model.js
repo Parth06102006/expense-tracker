@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import mongoose from "mongoose";
 
 const expressTrackerSchema = new Schema
 (
@@ -31,6 +32,6 @@ const expressTrackerSchema = new Schema
     },{timestamps:true}
 )
 
-const expense = mongoose.model('Expense',expressTrackerSchema);
-export {expense}
+const Expense = mongoose.model('Expense',expressTrackerSchema);
+export {Expense}
 
