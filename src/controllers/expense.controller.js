@@ -53,14 +53,47 @@ export const deleteExpense = asyncHandler(async(req,res,next)=>{
 export const getAllExpenses = asyncHandler(async(req,res,next)=>
     {
         const userId = req.user?._id;
-        const expenseList = await Expense.aggregate
-        (
-            [
-                {
-                    $match:{ "userId" : new mongoose.Types.ObjectId(userId)}
-                }
-            ]
-        )
+        const {filter,from,to} = req.query;
+        const query = { userId : new mongoose.Types.ObjectId(userId)};
+        if(filter)
+        {
+            const today = new Date();
+
+            switch(filter)
+            {
+                case "week":
+                    {
+                        const weekAgo = new Date(today);
+                        weekAgo.setDate(today.getDate()-7);
+                        query.date = {$gte: weekAgo,$lte:today};
+                        break;
+                    }
+                case "month":
+                    {
+                        const monthAgo = new Date(today);
+                        monthAgo.setMonth(today.getMonth()-1);
+                        query.date = {$gte: monthAgo,$lte:today};
+                        break;
+                    }
+                case "3month":
+                    {
+                        const threeMonthAgo = new Date(today);
+                        threeMonthAgo.setMonth(today.getMonth()-3);
+                        query.date = {$gte: threeMonthAgo,$lte:today};
+                        break;
+                    }
+                case "custom":
+                    {
+                        if(from && to)
+                        {
+                            query.date = {$gte: new Date(from),$lte:new Date(to)};
+                        }
+                        break;
+                    }
+            }
+        }
+
+        const expenseList = await Expense.find(query).sort({date:-1})
         if(expenseList.length === 0)
         {
             throw new ApiError(400,'Expense List is not present')

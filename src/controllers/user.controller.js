@@ -6,13 +6,11 @@ import bcrypt from 'bcrypt'
 
 export const signUp = asyncHandler(async(req,res)=>{
     const {username,email,password} = req.body;
-    console.log(username);
     
     if([username,email,password].some(t => t?.trim() === ''))
     {
         throw new ApiError(400,'Empty request');
     }
-    console.log(username);
     
     const existingUser = await User.findOne({email});
     if(existingUser)
@@ -45,18 +43,15 @@ export const login = asyncHandler(async(req,res,next)=>
     {
         throw new ApiError(400,'Fields are empty')
     }
-    console.log(email)
 
     const user = await User.findOne({email});
     if(!user)
     {
         throw new ApiError(403,'User not signedUp');
     }
-    console.log(email)
 
     let isPasswordValid = await user.isPasswordCorrect(password);
 
-    console.log(email)
     if(!isPasswordValid)
     {
         throw new ApiError(401,'Password incorrect')
@@ -65,19 +60,13 @@ export const login = asyncHandler(async(req,res,next)=>
 
     const accessToken = await user.generateAccessToken();
     const refreshToken = await user.generateRefreshToken();
-    console.log(accessToken);
-    console.log('-------------------')
-    console.log(refreshToken);
     if(!accessToken||!refreshToken)
     {
         throw new ApiError(404,'Tokens not generated')
     }
 
-    console.log(user)
     user.refreshToken = refreshToken;
-    console.log(user)
     user.save();
-    console.log(user)
 
     const options = 
     {
@@ -123,9 +112,7 @@ export const refershAccessToken = asyncHandler(async(req,res)=>{
 
 export const logOut = asyncHandler(async(req,res,next)=>
 {
-    console.log('**************')
     const user = await User.findByIdAndUpdate(req.user?._id,{$unset:{refreshToken : 1}},{new:true});
-    console.log(user);
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
     return res.status(200).json(new ApiResponse(200,user,'LoggedOut Successfully'));
