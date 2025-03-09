@@ -48,4 +48,5 @@ Authentication: JWT (JSON Web Tokens)
 Error Handling: Custom API error handling
 
 >[!NOTE]
->[![Visit The Project](https://img.shields.io/badge/Visit%20My%20Website-blue)](https://roadmap.sh/projects/expense-tracker-api)
+>[![Visit The Project](https://img.shields.io/badge/Visit%20The%20Project-blue)](https://roadmap.sh/projects/expense-tracker-api)
+
